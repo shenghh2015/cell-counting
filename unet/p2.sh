@@ -1,0 +1,4 @@
+# python cell_cycle.py --net_type Unet --backbone efficientnetb3 --pre_train True --batch_size 5 --dim 512 --epoch 200 --lr 5e-4 --train 1100 --bk_weight 0.9 --gpu 2
+# python life_cycle_flu.py --net_type Unet --backbone efficientnetb3 --pre_train True --batch_size 1 --dim 1024 --epoch 60 --lr 5e-4 --train 1100 --filtered True --gpu 2 --loss mse --act_fun relu --channels fl2
+# python life_cycle_flu.py --net_type Unet --backbone efficientnetb3 --pre_train True --batch_size 1 --dim 1024 --epoch 100 --lr 5e-4 --train 1100 --filtered True --gpu 2 --loss mse --act_fun relu --channels combined --dataset cell_cycle_1984_v2 --flu_scale 1.0
+python phase_flu.py --net_type Unet --backbone efficientnetb3 --pre_train True --batch_size 2 --dim 800 --epoch 60 --lr 5e-4 --train 1100 --filtered True --gpu 2 --loss mse --act_fun relu --channels fl2 --dataset cell_cycle_1984_v2 --ext True
