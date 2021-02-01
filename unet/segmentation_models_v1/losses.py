@@ -1,5 +1,6 @@
 from .base import Loss
 from .base import functional as F
+import tensorflow as tf
 
 SMOOTH = 1e-5
 
@@ -237,6 +238,69 @@ class BinaryFocalLoss(Loss):
     def __call__(self, gt, pr):
         return F.binary_focal_loss(gt, pr, alpha=self.alpha, gamma=self.gamma, **self.submodules)
 
+class MSELoss(Loss):
+    r"""Creates a criterion that measures the Binary Focal Loss between the
+    ground truth (gt) and the prediction (pr).
+
+    .. math:: L(gt, pr) = - gt \alpha (1 - pr)^\gamma \log(pr) - (1 - gt) \alpha pr^\gamma \log(1 - pr)
+
+    Args:
+        alpha: Float or integer, the same as weighting factor in balanced cross entropy, default 0.25.
+        gamma: Float or integer, focusing parameter for modulating factor (1 - p), default 2.0.
+
+    Returns:
+        A callable ``binary_focal_loss`` instance. Can be used in ``model.compile(...)`` function
+        or combined with other losses.
+
+    Example:
+
+    .. code:: python
+
+        loss = BinaryFocalLoss()
+        model.compile('SGD', loss=loss)
+    """
+
+    def __init__(self):
+        super().__init__(name='mse_loss')
+
+    def __call__(self, gt, pr):
+        return tf.keras.MSE(gt, pr)
+
+class wMSELoss(Loss):
+    r"""Creates a criterion that measures the Binary Focal Loss between the
+    ground truth (gt) and the prediction (pr).
+
+    .. math:: 
+
+    Args:
+        alpha: Float or integer, the same as weighting factor in balanced cross entropy, default 0.25.
+        gamma: Float or integer, focusing parameter for modulating factor (1 - p), default 2.0.
+
+    Returns:
+        A callable ``binary_focal_loss`` instance. Can be used in ``model.compile(...)`` function
+        or combined with other losses.
+
+    Example:
+
+    .. code:: python
+
+        loss = BinaryFocalLoss()
+        model.compile('SGD', loss=loss)
+    """
+
+    def __init__(self, lamda=1.0, beta=0.2):
+        super().__init__(name='weighted_mse_loss')
+        self.lamda = lamda
+        self.beta = beta
+
+    def __call__(self, gt, pr):
+#         gt_tensor = tf.convert_to_tensor(gt)
+        square_err = tf.square(gt-pr)
+        weight_map = self.beta*gt+1
+#         weight_map = self.beta*gt +self.lamda*tf.reduce_mean(gt, axis = [1,2,3], keepdims = True)
+#         weight_map = self.beta*gt +self.lamda*tf.reduce_mean(gt, axis = [1,2,3], keepdims = True)
+#         square_err = tf.reduce_mean(tf.square(gt-pr))
+        return tf.reduce_mean(weight_map*square_err)
 
 # aliases
 jaccard_loss = JaccardLoss()
@@ -260,3 +324,5 @@ binary_focal_jaccard_loss = binary_focal_loss + jaccard_loss
 
 categorical_focal_dice_loss = categorical_focal_loss + dice_loss
 categorical_focal_jaccard_loss = categorical_focal_loss + jaccard_loss
+
+weighted_mse_loss = wMSELoss()

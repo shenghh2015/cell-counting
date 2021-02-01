@@ -5,10 +5,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import argparse
 import segmentation_models_v1 as sm
-from segmentation_models_v1 import Unet, Linknet, PSPNet, FPN, DUNet, BiFPN, Nestnet
+from segmentation_models_v1 import Unet
 sm.set_framework('tf.keras')
 
-from helper_function import plot_deeply_history, plot_history
+from helper_function import plot_history
 from helper_function import precision, recall, f1_score
 from sklearn.metrics import confusion_matrix
 
@@ -20,9 +20,9 @@ def generate_folder(folder_name):
 		os.system('mkdir -p {}'.format(folder_name))
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--docker", type=str2bool, default = True)
+parser.add_argument("--docker", type=str2bool, default = False)
 parser.add_argument("--gpu", type=str, default = '0')
-parser.add_argument("--net_type", type=str, default = 'DUNet')  #Unet, Linknet, PSPNet, FPN
+parser.add_argument("--net_type", type=str, default = 'UNet')  #Unet, Linknet, PSPNet, FPN
 parser.add_argument("--backbone", type=str, default = 'efficientnetb3')
 parser.add_argument("--epoch", type=int, default = 2)
 parser.add_argument("--dim", type=int, default = 512)

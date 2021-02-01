@@ -285,6 +285,33 @@ class PSNR(Metric):
     def __call__(self, gt, pr):
         return tf.image.psnr(gt, pr, max_val = self.max_val)
 
+class MSE(Metric):
+    r"""Creates a criterion that measures the PSRN between the
+    ground truth (gt) and the prediction (pr).
+
+    Args:
+		max val: the maximal pixel value in the image
+
+    Returns:
+        A callable ``psnr`` instance. Can be used in ``model.compile(...)`` function.
+
+    Example:
+
+    .. code:: python
+
+        metric = PSNR()
+        model.compile('SGD', loss=loss, metrics=[metric])
+    """
+
+    def __init__(
+            self,
+            name=None
+    ):
+        name = name or 'mse'
+        super().__init__(name=name)
+
+    def __call__(self, gt, pr):
+        return tf.reduce_mean(tf.square(gt-pr))
 
 class Pearson(Metric):
     r"""Creates a criterion that measures the Pearson correlation coefficient between the
@@ -320,4 +347,5 @@ f2_score = FScore(beta=2)
 precision = Precision()
 recall = Recall()
 psnr = PSNR()
+mse = MSE()
 pearson = Pearson()
