@@ -1,5 +1,5 @@
 # cell-counting
 Deeply supervised density regression for automatic cell counting in microscopy images
 
-# To be re-organized
+# The codebase is being re-organized. It will come back soon.
 
