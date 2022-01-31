@@ -1,5 +1,6 @@
 # cell-counting
 Deeply supervised density regression for automatic cell counting in microscopy images
 
-# The codebase is being re-organized. It will come back soon.
-
+1. train.py: train model
+2. test.py: test model      
+3. train_script.sh: train example of how to use train.py
