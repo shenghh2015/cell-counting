@@ -1,0 +1,6 @@
+tensorflow-gpu==1.13.0
+numpy
+opencv-python
+scikit-image
+albumentations==0.3.0
+matplotlib
